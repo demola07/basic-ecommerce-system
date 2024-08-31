@@ -2,6 +2,9 @@ node_modules
 
 dist/
 
+
+# dotenv environment variable files
+.env
 env/.env
 env/core.env
 env/db.env
