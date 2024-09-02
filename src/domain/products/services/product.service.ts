@@ -15,6 +15,14 @@ export class ProductService {
     private readonly productRepo: ProductRepository,
   ) {}
 
+  async findAllApproved(): Promise<IProduct[]> {
+    const queryBuilder = this.productRepo.createQueryBuilder('product');
+    const conditions = { isApproved: true };
+    // Build the query dynamically
+    buildQuery(queryBuilder, conditions, 'product');
+    return await queryBuilder.getMany();
+  }
+
   async findAll(user: User): Promise<IProduct[]> {
     const queryBuilder = this.productRepo.createQueryBuilder('product');
     const conditions = { owner: user };
