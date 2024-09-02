@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { UserModule } from './domain/users/user.module';
@@ -26,9 +24,8 @@ import { InterceptorsModule } from './infrastructure/interceptors/interceptors.m
     FiltersModule,
     InterceptorsModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

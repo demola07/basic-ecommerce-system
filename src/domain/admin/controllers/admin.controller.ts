@@ -16,10 +16,11 @@ import { UserRole } from 'src/application/entities';
 import { Roles } from 'src/domain/auth/decorators';
 import { Not } from 'typeorm';
 import { ProductService } from 'src/domain/products/services';
-import { ProductApproveDto, ProductUpdateDto } from 'src/domain/products/dtos';
+import { ProductApproveDto } from 'src/domain/products/dtos';
 import { BanUserDto } from 'src/domain/users/dtos';
-// import { HttpCode } from '@nestjs/common';
-
+import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { HttpCode } from '@nestjs/common';
+@ApiTags('admin')
 @Controller('admin')
 export class AdminController {
   constructor(
@@ -28,6 +29,17 @@ export class AdminController {
   ) {}
 
   @Post('create')
+  @ApiResponse({
+    status: 201,
+    description: 'The admin has been successfully created.',
+  })
+  @HttpCode(201)
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 404, description: 'Not found.' })
+  @ApiBody({
+    type: CreateAdminDto,
+    description: 'Json structure for user object',
+  })
   @UsePipes(ValidationPipe)
   async createUser(@Body() userData: CreateAdminDto) {
     const payload = {
@@ -57,6 +69,17 @@ export class AdminController {
 
   @Roles(UserRole.ADMIN)
   @Patch('product/:id/user/:userId/approve')
+  @ApiResponse({
+    status: 200,
+    description: 'approve store product',
+  })
+  @HttpCode(200)
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 404, description: 'Not found.' })
+  @ApiBody({
+    type: ProductApproveDto,
+    description: 'Json structure for product object',
+  })
   async approveProduct(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -67,6 +90,17 @@ export class AdminController {
 
   @Roles(UserRole.ADMIN)
   @Patch('user/:id/ban')
+  @ApiResponse({
+    status: 200,
+    description: 'Ban/unban store user',
+  })
+  @HttpCode(200)
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 404, description: 'Not found.' })
+  @ApiBody({
+    type: BanUserDto,
+    description: 'Json structure for user object',
+  })
   async banUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: BanUserDto,
