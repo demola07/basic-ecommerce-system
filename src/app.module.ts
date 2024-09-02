@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { UserModule } from './domain/users/user.module';
 import { AuthModule } from './domain/auth/auth.module';
@@ -16,6 +17,12 @@ import { InterceptorsModule } from './infrastructure/interceptors/interceptors.m
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     DatabaseModule,
     UserModule,
     AuthModule,
