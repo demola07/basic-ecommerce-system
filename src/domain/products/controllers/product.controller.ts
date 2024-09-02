@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Param,
-  NotFoundException,
   Body,
   Post,
   Delete,
@@ -13,7 +12,6 @@ import {
   Req,
   ParseIntPipe,
   Patch,
-  UseGuards,
 } from '@nestjs/common';
 import { ProductCreateDto } from '../dtos/product-create.dto';
 import { ProductUpdateDto } from '../dtos/product-update.dto';
@@ -21,8 +19,9 @@ import { ProductService } from '../services/product.service';
 import { User } from 'src/domain/users/decorators';
 import { User as UserEntity, UserRole } from 'src/application/entities';
 import { Roles } from 'src/domain/auth/decorators';
-// import { AuthGuard } from 'src/domain/auth/guards';
-
+import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { HttpCode } from '@nestjs/common';
+@ApiTags('products')
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -48,6 +47,17 @@ export class ProductController {
   }
 
   @Post('/')
+  @ApiResponse({
+    status: 201,
+    description: 'The product has been successfully created.',
+  })
+  @HttpCode(201)
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 404, description: 'Not found.' })
+  @ApiBody({
+    type: ProductCreateDto,
+    description: 'Json structure for product object',
+  })
   @Roles(UserRole.USER)
   async create(
     @Body() createProductDto: ProductCreateDto,
@@ -57,6 +67,17 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @ApiResponse({
+    status: 201,
+    description: 'The product has been successfully updated.',
+  })
+  @HttpCode(201)
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 404, description: 'Not found.' })
+  @ApiBody({
+    type: ProductUpdateDto,
+    description: 'Json structure for product object',
+  })
   @Roles(UserRole.USER)
   async update(
     @Param('id', ParseIntPipe) id: number,
