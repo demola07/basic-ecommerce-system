@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { User } from 'src/application/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/domain/users/services';

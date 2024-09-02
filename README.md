@@ -20,8 +20,9 @@
    - [User Endpoints](#user-endpoints)
    - [Product Endpoints](#product-endpoints)
    - [Auth Endpoints](#auth-endpoints)
-8. [Conclusion](#conclusion)
-9. [References](#references)
+8. [Migrations](#migrations)
+9. [Conclusion](#conclusion)
+10. [References](#references)
 
 ---
 
@@ -271,6 +272,29 @@ A well-documented breakdown of the techstore api endpoints can be found in the s
   ```
   http://localhost:4000/api-docs#/
   ```
+
+---
+
+## Migrations 
+To run migrations in your project, you can use the following commands defined in your `package.json` file:
+
+1. **Run Migrations:**
+   - Command: `npm run migrate`
+   - This command will execute the `migration:run` method from TypeORM, which will run all pending migrations in your project using the configuration specified in `ormconfig.ts`.
+
+2. **Create a New Migration:**
+   - Command: `npm run migration:create --name=MigrationName`
+   - Replace `MigrationName` with the desired name of your migration. This will generate a new migration file in the `migrations` folder, with the configuration from `ormconfig.ts`.
+
+3. **Apply Migrations (Up):**
+   - Command: `npm run migration:up`
+   - This will run all pending migrations, applying any changes to the database.
+
+4. **Revert Migrations (Down):**
+   - Command: `npm run migration:down`
+   - This command will revert the last executed migration, rolling back the changes in the database.
+
+These commands are tailored for a TypeORM setup with a configuration file named `ormconfig.ts`. Make sure this configuration file is properly set up with your database connection details.
 
 ---
 

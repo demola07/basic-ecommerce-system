@@ -6,10 +6,6 @@ import {
   Body,
   Post,
   Delete,
-  Put,
-  BadRequestException,
-  SetMetadata,
-  Req,
   ParseIntPipe,
   Patch,
 } from '@nestjs/common';

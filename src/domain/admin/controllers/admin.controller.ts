@@ -6,7 +6,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { UsePipes } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';

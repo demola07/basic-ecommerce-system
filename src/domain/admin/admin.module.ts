@@ -2,7 +2,6 @@ import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Product, User } from 'src/application/entities';
-// import { AuthModule } from '../auth/auth.module';
 import { AuthService } from '../auth/services';
 import { UserRepository } from '../users/repository';
 import { AdminService } from './services';
