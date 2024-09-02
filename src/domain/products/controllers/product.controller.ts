@@ -13,6 +13,7 @@ import {
   Req,
   ParseIntPipe,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductCreateDto } from '../dtos/product-create.dto';
 import { ProductUpdateDto } from '../dtos/product-update.dto';
@@ -20,6 +21,7 @@ import { ProductService } from '../services/product.service';
 import { User } from 'src/domain/users/decorators';
 import { User as UserEntity, UserRole } from 'src/application/entities';
 import { Roles } from 'src/domain/auth/decorators';
+// import { AuthGuard } from 'src/domain/auth/guards';
 
 @Controller('products')
 export class ProductController {
@@ -30,10 +32,10 @@ export class ProductController {
     return await this.productService.findAllApproved();
   }
 
-  @Get('')
+  @Get('/')
   @Roles(UserRole.USER)
   async findAll(@User() user: UserEntity) {
-    return await this.productService.findAll(user);
+    return await this.productService.findAllByUser(user);
   }
 
   @Get(':id')
@@ -45,7 +47,7 @@ export class ProductController {
     return await this.productService.findById(id, user);
   }
 
-  @Post('')
+  @Post('/')
   @Roles(UserRole.USER)
   async create(
     @Body() createProductDto: ProductCreateDto,

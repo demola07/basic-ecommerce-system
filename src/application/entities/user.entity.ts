@@ -39,6 +39,9 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
+  @Column({ default: false })
+  isBanned: boolean;
+
   toSafeObject(): Omit<User, 'password'> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...safeUser } = this;

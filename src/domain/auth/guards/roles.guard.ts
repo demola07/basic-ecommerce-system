@@ -15,6 +15,17 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const req = context.switchToHttp().getRequest() as any;
+    const { path, method } = req;
+
+    const excludedRoutes = [{ path: '/products/approved', method: 'GET' }];
+
+    const isExcluded = excludedRoutes.some(
+      (route) => route.path === path && route.method === method,
+    );
+
+    if (isExcluded) {
+      return true;
+    }
     const user = req.user;
     return matchRoles(roles, user.role);
   }

@@ -6,9 +6,11 @@ import {
   BadRequestException,
   ForbiddenException,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../services';
 import { UserLoginDto } from '../dtos';
+// import { AuthGuard } from '../guards';
 // import { CookieInterceptor } from './interceptor/cookie.interceptor';
 
 // @UseInterceptors(CookieInterceptor)
@@ -16,23 +18,9 @@ import { UserLoginDto } from '../dtos';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  // @UseGuards(AuthGuard)
   @Post('login')
   async loginUser(@Body() userData: UserLoginDto) {
     return this.authService.login(userData);
   }
-
-  // @Post('refresh-token')
-  // async getTokens(@Req() req): Promise<LoginResponse> {
-  //   const token = req.cookies['refreshToken'];
-
-  //   try {
-  //     const { accessToken, refreshToken, user } =
-  //       await this.authService.refreshTokens(token);
-  //     if (accessToken && user) {
-  //       return { accessToken, refreshToken };
-  //     }
-  //   } catch (error) {
-  //     throw new ForbiddenException(error.message);
-  //   }
-  // }
 }

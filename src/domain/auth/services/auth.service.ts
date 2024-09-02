@@ -4,19 +4,19 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/application/entities';
-// import { CreateUserDto } from 'src/domain/users/dtos';
 import { UserService } from 'src/domain/users/services';
+import { verify, JwtPayload } from 'jsonwebtoken';
 import {
   CREDENTIALS_INVALID,
   SOMETHING_WENT_WRONG,
+  USER_BANNED,
   USER_NOT_FOUND,
 } from 'src/shared/errors';
 import { UserLoginDto } from '../dtos';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import {
   ACCESS_TOKEN_SECRET,
@@ -31,17 +31,6 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
-
-  // async getAuthUser(email: string, password: string): Promise<User> {
-  //   try {
-  //     const user = await this.userService.findOneByEmail(email);
-  //     this.verifyPassword(password, user.password);
-  //     user.password = null;
-  //     return user;
-  //   } catch (error) {
-  //     throw new InternalServerErrorException(SOMETHING_WENT_WRONG);
-  //   }
-  // }
 
   private async verifyPassword(
     plainTextPassword: string,
@@ -62,6 +51,9 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException(USER_NOT_FOUND);
     }
+    if (user.isBanned) {
+      throw new UnauthorizedException(USER_BANNED);
+    }
     await this.verifyPassword(password, user.password);
     return this.createToken(user);
   }
@@ -70,6 +62,7 @@ export class AuthService {
     const data: JwtPayload = {
       email: user.email,
       name: user.name,
+      role: user.role,
       sub: user.id.toString(),
     };
     try {
@@ -94,5 +87,14 @@ export class AuthService {
     } catch (error) {
       throw new InternalServerErrorException(SOMETHING_WENT_WRONG);
     }
+  }
+
+  async isTokenValid(token: string): Promise<boolean> {
+    const decoded = verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const user = await this.userService.findOne({ id: +decoded.sub });
+    if (user.isBanned) {
+      return false;
+    }
+    return true;
   }
 }

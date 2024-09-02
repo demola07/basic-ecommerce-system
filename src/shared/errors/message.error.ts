@@ -6,3 +6,4 @@ export const CREDENTIALS_INVALID = 'credentials.invalid';
 export const BAD_TOKEN = 'bad.token';
 export const SOMETHING_WENT_WRONG = 'Something went wrong';
 export const MISSING_AUTH_HEADER = 'Missing Authorization Header';
+export const USER_BANNED = 'User is banned, Contact the Admin';
