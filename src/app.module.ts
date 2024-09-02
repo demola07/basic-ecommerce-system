@@ -10,6 +10,8 @@ import { ProductModule } from './domain/products/product.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './domain/auth/guards';
 import { AdminModule } from './domain/admin/admin.module';
+import { FiltersModule } from './infrastructure/filters/filter.module';
+import { InterceptorsModule } from './infrastructure/interceptors/interceptors.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AdminModule } from './domain/admin/admin.module';
     AuthModule,
     ProductModule,
     AdminModule,
+    FiltersModule,
+    InterceptorsModule,
   ],
   controllers: [AppController],
   providers: [
