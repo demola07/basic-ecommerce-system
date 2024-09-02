@@ -63,6 +63,8 @@ Before setting up the development environment, ensure that you have the followin
 - **NestJS** is a framework for building efficient, scalable Node.js server-side applications. It uses progressive JavaScript, is built with and fully supports TypeScript (yet still enables developers to code in pure JavaScript) and combines elements of OOP (Object Oriented Programming), FP (Functional Programming), and FRP (Functional Reactive Programming)..
   - Download and install from [NestJS Official Website](https://docs.nestjs.com/).
 
+- **PostgreSQL:** Install PostgreSQL on your local machine. This project uses PostgreSQL as the database. You can download and install PostgreSQL from [here](https://www.pgadmin.org/).
+
 ---
 
 ## Setting Up the Development Environment
