@@ -9,9 +9,9 @@ import { UserService } from '../services';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
+  @Post('create/')
   @UsePipes(ValidationPipe)
-  async createUser(@Body() dto: CreateUserDto) {
-    return await this.userService.createUser(dto);
+  async createUser(@Body() userData: CreateUserDto) {
+    return await this.userService.createOne(userData);
   }
 }

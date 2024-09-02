@@ -1,18 +1,73 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserPayload } from 'src/interfaces';
-import { IUserService } from '../types';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+// import { CreateUserPayload } from 'src/interfaces';
 import { User } from 'src/application/entities';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-
+import { USER_NOT_FOUND, USERS_ALREADY_EXISTS } from 'src/shared/errors';
+import { CreateUserDto } from '../dtos';
+import { UserRepository } from '../repository';
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {} // private readonly departmentService: DepartmentService, // private readonly emailService: EmailService, // private readonly repository: UserRepository,
+  // constructor(
+  //   private readonly logger: Logger,
+  //   @InjectRepository(User) private userRepo: Repository<User>,
+  // ) {}
 
-  // async createUser(userData: CreateUserPayload): Promise<IUserService> {
-  async createUser(userData: CreateUserPayload): Promise<string> {
-    // const data = await this.repository.createOne(userData);
-    // await this.emailService.sendWelcomeEmail(data.email, data.firstName);
-    return 'data';
+  constructor(
+    private readonly logger: Logger,
+    @InjectRepository(User)
+    private readonly userRepo: UserRepository,
+  ) {}
+
+  public async findOneByEmail(email: string) {
+    const user = await this.userRepo.findOne({
+      where: { email },
+    });
+    if (!user) {
+      throw new NotFoundException(USER_NOT_FOUND);
+    }
+    return user;
+  }
+
+  async findOneById(id: number): Promise<User> {
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
+    if (!user) {
+      throw new NotFoundException(USER_NOT_FOUND);
+    }
+    return user;
+  }
+
+  async findAll() {
+    return this.userRepo.find({});
+  }
+
+  public async createOne(user: CreateUserDto) {
+    const { email } = user;
+    const existingUser = await this.userRepo.findOne({
+      where: { email },
+    });
+    if (existingUser) {
+      throw new ConflictException(USERS_ALREADY_EXISTS);
+    }
+    const hashedPassword = await this.hashPassword(user.password);
+    const newUser = this.userRepo.create({
+      ...user,
+      password: hashedPassword,
+      email: user.email.toLowerCase(),
+    });
+    const savedUser = await this.userRepo.save(newUser);
+    this.logger.log(`user created successfully ${JSON.stringify(savedUser)}`);
+    return savedUser.toSafeObject();
+  }
+
+  private async hashPassword(password: string) {
+    return await bcrypt.hash(password, 10);
   }
 }

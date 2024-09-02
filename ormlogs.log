@@ -1,0 +1,31 @@
+[2024-09-02T09:09:20.695Z][QUERY]: SELECT * FROM current_schema()
+[2024-09-02T09:09:20.737Z][QUERY]: SELECT version();
+[2024-09-02T09:09:20.740Z][QUERY]: SELECT * FROM current_schema()
+[2024-09-02T09:09:20.741Z][QUERY]: SELECT * FROM current_database()
+[2024-09-02T09:09:20.742Z][QUERY]: SELECT "table_schema", "table_name", obj_description(('"' || "table_schema" || '"."' || "table_name" || '"')::regclass, 'pg_class') AS table_comment FROM "information_schema"."tables" WHERE ("table_schema" = 'public' AND "table_name" = 'product') OR ("table_schema" = 'public' AND "table_name" = 'user')
+[2024-09-02T09:09:20.747Z][QUERY]: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = 'public' AND "table_name" = 'typeorm_metadata'
+[2024-09-02T09:09:35.575Z][QUERY]: SELECT * FROM current_schema()
+[2024-09-02T09:09:35.636Z][QUERY]: SELECT version();
+[2024-09-02T09:09:35.640Z][QUERY]: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = 'public' AND "table_name" = 'migrations'
+[2024-09-02T09:09:35.653Z][QUERY]: CREATE TABLE "migrations" ("id" SERIAL NOT NULL, "timestamp" bigint NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_8c82d7f526340ab734260ea46be" PRIMARY KEY ("id"))
+[2024-09-02T09:09:35.684Z][QUERY]: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
+[2024-09-02T09:09:35.686Z]No migrations are pending
+[2024-09-02T09:11:58.341Z][QUERY]: SELECT * FROM current_schema()
+[2024-09-02T09:11:58.384Z][QUERY]: SELECT version();
+[2024-09-02T09:11:58.387Z][QUERY]: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = 'public' AND "table_name" = 'migrations'
+[2024-09-02T09:11:58.394Z][QUERY]: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
+[2024-09-02T09:11:58.396Z]No migrations are pending
+[2024-09-02T09:14:48.780Z][QUERY]: SELECT * FROM current_schema()
+[2024-09-02T09:14:49.061Z][QUERY]: SELECT version();
+[2024-09-02T09:14:49.064Z][QUERY]: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = 'public' AND "table_name" = 'migrations'
+[2024-09-02T09:14:49.072Z][QUERY]: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
+[2024-09-02T09:14:49.074Z]0 migrations are already loaded in the database.
+[2024-09-02T09:14:49.074Z]1 migrations were found in the source code.
+[2024-09-02T09:14:49.074Z]1 migrations are new migrations must be executed.
+[2024-09-02T09:14:49.075Z][QUERY]: START TRANSACTION
+[2024-09-02T09:14:49.076Z][QUERY]: CREATE TABLE "product" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" text NOT NULL, "price" numeric(10,2) NOT NULL, "isApproved" boolean NOT NULL DEFAULT true, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "ownerId" integer, CONSTRAINT "PK_bebc9158e480b949565b4dc7a82" PRIMARY KEY ("id"))
+[2024-09-02T09:14:49.089Z][QUERY]: CREATE TABLE "user" ("id" SERIAL NOT NULL, "name" character varying(500) NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, "role" character varying NOT NULL DEFAULT 'user', "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))
+[2024-09-02T09:14:49.117Z][QUERY]: ALTER TABLE "product" ADD CONSTRAINT "FK_cbb5d890de1519efa20c42bcd52" FOREIGN KEY ("ownerId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+[2024-09-02T09:14:49.126Z][QUERY]: INSERT INTO "migrations"("timestamp", "name") VALUES ($1, $2) -- PARAMETERS: [1725268156693,"UserAndProductTableCreate1725268156693"]
+[2024-09-02T09:14:49.132Z][QUERY]: COMMIT
+[2024-09-02T09:14:49.135Z]Migration UserAndProductTableCreate1725268156693 has been  executed successfully.

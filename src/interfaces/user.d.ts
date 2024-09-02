@@ -1,8 +1,9 @@
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
   email: string;
-  password: string;
+  password?: string;
+  toSafeObject(): Omit<IUser, 'password'>;
 }
 
 export type CreateUserPayload = {

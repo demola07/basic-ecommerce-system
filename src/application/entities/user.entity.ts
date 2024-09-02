@@ -23,8 +23,8 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: 'user' })
-  role: string; // e.g., 'user', 'admin'
+  // @Column({ default: 'user' })
+  // role: string; // e.g., 'user', 'admin'
 
   @OneToMany(() => Product, (product) => product.owner)
   products: Product[];
@@ -34,4 +34,10 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
+
+  toSafeObject(): Omit<User, 'password'> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...safeUser } = this;
+    return safeUser as Omit<User, 'password'>;
+  }
 }
