@@ -16,13 +16,16 @@ export class Product {
   @Column()
   name: string;
 
+  @Column()
+  quantity: number;
+
   @Column('text')
   description: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
-  @Column({ default: true })
+  @Column({ default: false })
   isApproved: boolean;
 
   @ManyToOne(() => User, (user) => user.products)
