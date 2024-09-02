@@ -7,7 +7,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Product } from './product.entity';
-// import { Role } from './role.entity';
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 
 @Entity()
 export class User {
@@ -23,8 +27,8 @@ export class User {
   @Column()
   password: string;
 
-  // @Column({ default: 'user' })
-  // role: string; // e.g., 'user', 'admin'
+  @Column({ default: 'user' })
+  role: string; // e.g., 'user', 'admin'
 
   @OneToMany(() => Product, (product) => product.owner)
   products: Product[];

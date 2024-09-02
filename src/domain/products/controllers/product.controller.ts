@@ -18,18 +18,26 @@ import { ProductCreateDto } from '../dtos/product-create.dto';
 import { ProductUpdateDto } from '../dtos/product-update.dto';
 import { ProductService } from '../services/product.service';
 import { User } from 'src/domain/users/decorators';
-import { User as UserEntity } from 'src/application/entities';
+import { User as UserEntity, UserRole } from 'src/application/entities';
+import { Roles } from 'src/domain/auth/decorators';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Get()
+  @Get('/approved')
+  async findAllApproved() {
+    return await this.productService.findAllApproved();
+  }
+
+  @Get('')
+  @Roles(UserRole.USER)
   async findAll(@User() user: UserEntity) {
     return await this.productService.findAll(user);
   }
 
   @Get(':id')
+  @Roles(UserRole.USER)
   async findById(
     @Param('id', ParseIntPipe) id: number,
     @User() user: UserEntity,
@@ -38,7 +46,7 @@ export class ProductController {
   }
 
   @Post('')
-  // @Roles('admin', 'manager')
+  @Roles(UserRole.USER)
   async create(
     @Body() createProductDto: ProductCreateDto,
     @User() user: UserEntity,
@@ -47,7 +55,7 @@ export class ProductController {
   }
 
   @Patch(':id')
-  // @Roles('admin', 'manager')
+  @Roles(UserRole.USER)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() product: ProductUpdateDto,
@@ -57,7 +65,7 @@ export class ProductController {
   }
 
   @Delete(':id')
-  // @Roles('admin')
+  @Roles(UserRole.USER)
   async deleteProductById(
     @Param('id', ParseIntPipe) id: number,
     @User() user: UserEntity,
