@@ -14,24 +14,6 @@ export const getTypeOrmConfig = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => {
   const isDevelopment = configService.get<string>(NODE_ENV) !== 'production';
-  console.log("dir", __dirname)
-  console.log("optionssss", {
-    type: 'postgres',
-    host: configService.get<string>(DATABASE_HOST),
-    port: configService.get<number>(DATABASE_PORT),
-    username: configService.get<string>(DATABASE_USER),
-    password: configService.get<string>(DATABASE_PASSWORD),
-    database: configService.get<string>(DATABASE),
-    synchronize: isDevelopment, // Automatically synchronize entities in development
-    entities: isDevelopment
-      ? [`/dist/**/**/*.entity.{ts,js}`] // Load TypeScript entities in development
-      : ['./dist/**/*.entity.js'], // Load compiled JavaScript entities in production
-    // entities: isDevelopment
-    //   ? [`${__dirname}/../**/*.entity.{ts,js}`] // Load TypeScript entities in development
-    //   : ['./dist/**/*.entity.js'], // Load compiled JavaScript entities in production
-    logging: configService.get<boolean>(DATABASE_DEBUG),
-    autoLoadEntities: true,
-  })
   return {
     type: 'postgres',
     host: configService.get<string>(DATABASE_HOST),

@@ -3,10 +3,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import { DataSource } from 'typeorm';
 
-// const rootDir: string = __dirname;
-
-// const migrationsDir = path.join(rootDir, '../../migrations');
-
 export default new DataSource({
   type: 'postgres',
   host: process.env.DATABASE_HOST,
@@ -19,7 +15,7 @@ export default new DataSource({
   logging: true,
   logger: 'file',
   entities: ['dist/**/**/**/*.entity{.ts,.js}'],
-  migrations: ['src/migrations/**/*.ts'],
+  migrations: ['migrations/**/*.ts'],
   subscribers: ['src/subscriber/**/*.ts'],
   migrationsTransactionMode: 'each',
   // migrationsTableName: 'migration_table',
