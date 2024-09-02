@@ -173,7 +173,7 @@ Once the Docker containers are up and running, you can access the application an
 
 ### Accessing the Application
 
-- **API Base URL**: `http://localhost:4000`
+- **API Base URL**: `http://localhost:4000/`
 
 ### Stopping the Application
 
@@ -228,38 +228,38 @@ Controllers handle incoming HTTP requests and delegate tasks to the appropriate 
 Handles administrative functionalities such as creating admin users, managing regular users, and approving products.
 
 **Key Endpoints:**
-- `POST /admin/create`: Create a new admin user.
-- `GET /admin/users`: Retrieve all non-admin users.
-- `GET /admin/users/:id`: Retrieve a specific user by ID.
-- `GET /admin/products`: Retrieve all products.
-- `PATCH /admin/product/:id/user/:userId/approve`: Approve a product.
-- `PATCH /admin/user/:id/ban`: Ban or unban a user.
+- `POST api/v1/admin/create`: Create a new admin user.
+- `GET api/v1/admin/users`: Retrieve all non-admin users.
+- `GET api/v1/admin/users/:id`: Retrieve a specific user by ID.
+- `GET api/v1/admin/products`: Retrieve all products.
+- `PATCH api/v1/admin/product/:id/user/:userId/approve`: Approve a product.
+- `PATCH api/v1/admin/user/:id/ban`: Ban or unban a user.
 
 #### User Controller
 
 Manages user-related operations such as creating new users.
 
 **Key Endpoints:**
-- `POST /users/create`: Create a new user account.
+- `POST api/v1/users/create`: Create a new user account.
 
 #### Product Controller
 
 Handles product-related operations including creation, retrieval, updating, and deletion of products.
 
 **Key Endpoints:**
-- `GET /products/approved`: Retrieve all approved products for unauthenticated users.
-- `GET /products`: Retrieve all products belonging to the authenticated user.
-- `GET /products/:id`: Retrieve a specific product by ID.
-- `POST /products`: Create a new product.
-- `PATCH /products/:id`: Update an existing product.
-- `DELETE /products/:id`: Delete a product by ID.
+- `GET api/v1/products/approved`: Retrieve all approved products for unauthenticated users.
+- `GET api/v1/products`: Retrieve all products belonging to the authenticated user.
+- `GET api/v1/products/:id`: Retrieve a specific product by ID.
+- `POST api/v1/products`: Create a new product.
+- `PATCH api/v1/products/:id`: Update an existing product.
+- `DELETE api/v1/products/:id`: Delete a product by ID.
 
 #### Auth Controller
 
 Manages authentication processes such as user login.
 
 **Key Endpoints:**
-- `POST /auth/login`: Authenticate a user and retrieve an access token.
+- `POST api/v1/auth/login`: Authenticate a user and retrieve an access token.
 
 ---
 
