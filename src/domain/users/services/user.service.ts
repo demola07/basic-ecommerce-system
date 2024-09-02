@@ -9,15 +9,11 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'src/application/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { USER_NOT_FOUND, USERS_ALREADY_EXISTS } from 'src/shared/errors';
-import { CreateUserDto } from '../dtos';
+import { BanUserDto, CreateUserDto } from '../dtos';
 import { UserRepository } from '../repository';
+import { FindOptionsWhere } from 'typeorm';
 @Injectable()
 export class UserService {
-  // constructor(
-  //   private readonly logger: Logger,
-  //   @InjectRepository(User) private userRepo: Repository<User>,
-  // ) {}
-
   constructor(
     private readonly logger: Logger,
     @InjectRepository(User)
@@ -34,9 +30,9 @@ export class UserService {
     return user;
   }
 
-  async findOneById(id: number): Promise<User> {
+  async findOne(conditions: FindOptionsWhere<User>): Promise<User> {
     const user = await this.userRepo.findOne({
-      where: { id },
+      where: conditions,
     });
     if (!user) {
       throw new NotFoundException(USER_NOT_FOUND);
@@ -44,8 +40,14 @@ export class UserService {
     return user;
   }
 
-  async findAll() {
-    return this.userRepo.find({});
+  async findAll(conditions?: FindOptionsWhere<User>) {
+    if (conditions) {
+      return this.userRepo.find({
+        where: conditions,
+      });
+    } else {
+      return this.userRepo.find();
+    }
   }
 
   public async createOne(user: CreateUserDto) {
@@ -69,5 +71,11 @@ export class UserService {
 
   private async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);
+  }
+
+  async banUser(id: number, data: BanUserDto) {
+    const user = await this.findOne({ id });
+    const updatedUser = Object.assign(user, data);
+    return await this.userRepo.save(updatedUser);
   }
 }

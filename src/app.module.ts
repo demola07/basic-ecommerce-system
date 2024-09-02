@@ -9,6 +9,7 @@ import { AuthMiddleware } from './domain/auth/middleware';
 import { ProductModule } from './domain/products/product.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './domain/auth/guards';
+import { AdminModule } from './domain/admin/admin.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { RolesGuard } from './domain/auth/guards';
     UserModule,
     AuthModule,
     ProductModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
@@ -36,6 +38,7 @@ export class AppModule {
       .exclude(
         { path: 'auth/login', method: RequestMethod.POST },
         { path: 'users/create', method: RequestMethod.POST },
+        { path: 'admin/create', method: RequestMethod.POST },
         { path: 'products/approved', method: RequestMethod.GET },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
