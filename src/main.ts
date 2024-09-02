@@ -7,6 +7,8 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  const allowedOrigins = configService.get<string>('ALLOWED_HOSTS')?.split(',');
   app.setGlobalPrefix('api/v1/');
   app.use(helmet());
 
@@ -21,7 +23,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
-  const configService = app.get(ConfigService);
+  app.enableCors({
+    origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   const port = configService.get<number>(PORT) || 3000;
   await app.listen(port);
   console.log(`Nest is running at ${await app.getUrl()}`);
