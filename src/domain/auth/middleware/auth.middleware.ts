@@ -1,7 +1,12 @@
 import { verify } from 'jsonwebtoken';
-import { NestMiddleware, Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  NestMiddleware,
+  Injectable,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { CREDENTIALS_INVALID } from 'src/shared/errors';
+import { CREDENTIALS_INVALID, MISSING_AUTH_HEADER } from 'src/shared/errors';
 import { AccessTokenPayload } from '../types';
 import { UserService } from 'src/domain/users/services';
 import { User } from 'src/application/entities';
@@ -16,7 +21,7 @@ export class AuthMiddleware implements NestMiddleware {
     let user: User;
 
     if (!bearerHeader || !accessToken) {
-      return next();
+      throw new UnauthorizedException(MISSING_AUTH_HEADER);
     }
 
     try {
@@ -31,7 +36,7 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     if (user) {
-      req.user = user;
+      req.user = user.toSafeObject();
     }
     next();
   }

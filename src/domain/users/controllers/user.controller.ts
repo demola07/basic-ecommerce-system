@@ -5,11 +5,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { CreateUserDto } from '../dtos';
 import { UserService } from '../services';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create/')
+  @Post('create')
   @UsePipes(ValidationPipe)
   async createUser(@Body() userData: CreateUserDto) {
     return await this.userService.createOne(userData);
